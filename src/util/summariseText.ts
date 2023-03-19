@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-export async function summarise(text: string, { apiKey }: { apiKey: string }) {
+export async function summariseText(
+  text: string,
+  { apiKey }: { apiKey: string },
+) {
   try {
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
@@ -9,7 +12,7 @@ export async function summarise(text: string, { apiKey }: { apiKey: string }) {
         messages: [
           {
             role: 'system',
-            content: `You are a helpful assistant who outlines, in point format, important details of text provided to you`,
+            content: `Summarise the given text into point form, each point with relevant and important details. Start by providing a title for the summary.`,
           },
           { role: 'user', content: `${text}` },
         ],

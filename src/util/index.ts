@@ -1,3 +1,3 @@
 export * from './downloadAudioFromVideo';
-export * from './summarise';
+export * from './summariseText';
 export * from './transcribeAudioFile';
