@@ -20,9 +20,9 @@ inquirer
       case 'Summarise':
         summarise(answers.videoURL, {
           apiKey: process.env.OPENAI_API_KEY!,
-          keepSummaryFile: true,
-          keepAudioFile: true,
+          keepAudioFile: false,
           keepTranscriptFile: true,
+          keepSummaryFile: true,
         });
         break;
       case 'Transcribe':
