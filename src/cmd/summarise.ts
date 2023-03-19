@@ -34,15 +34,13 @@ export async function summarise(
     if (!fs.existsSync(audioFile)) {
       await downloadAudioFromVideo(videoURL, audioFile);
     }
-    let transcription: string | undefined;
-    if (fs.existsSync(transcriptFile)) {
-      transcription = fs.readFileSync(transcriptFile, 'utf-8');
-    } else {
-      transcription = await transcribeAudioFile(audioFile, { apiKey });
-      fs.writeFileSync(transcriptFile, transcription);
-    }
+
+    const transcription = await transcribeAudioFile(audioFile, { apiKey });
+    fs.writeFileSync(transcriptFile, transcription);
+
     const summary = await summariseText(transcription, { apiKey });
     fs.writeFileSync(summaryFile, summary);
+
     console.log(summary);
   } catch (e) {
     console.error(e);
