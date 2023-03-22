@@ -12,7 +12,7 @@ export async function summariseText(
         messages: [
           {
             role: 'system',
-            content: `Summarise the given text into point form, each point with relevant and important details. Start by providing a title for the summary.`,
+            content: `Summarise in point form. Do not miss important details. Start by providing a title for the summary.`,
           },
           { role: 'user', content: `${text}` },
         ],

@@ -1,28 +1,24 @@
 import fs from 'fs';
-import {
-  downloadAudioFromVideo,
-  summariseText,
-  transcribeAudioFile,
-} from '../util';
+import { downloadAudioFromVideo, transcribeAudioFile } from '../util';
 
-export async function summarise(
+const OUTPUT_AUDIO_FILE = 'audio.mp3';
+const TRANSCRIPT_FILE = 'transcription.txt';
+// const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
+
+export async function transcribe(
   videoURL: string,
   {
     apiKey,
     keepAudioFile = false,
     keepTranscriptFile = false,
-    keepSummaryFile = false,
     audioFile,
     transcriptFile,
-    summaryFile,
   }: {
     apiKey: string;
     keepAudioFile?: boolean;
     keepTranscriptFile?: boolean;
-    keepSummaryFile?: boolean;
     audioFile: string;
     transcriptFile: string;
-    summaryFile: string;
   },
 ) {
   try {
@@ -33,10 +29,7 @@ export async function summarise(
     const transcription = await transcribeAudioFile(audioFile, { apiKey });
     fs.writeFileSync(transcriptFile, transcription);
 
-    const summary = await summariseText(transcription, { apiKey });
-    fs.writeFileSync(summaryFile, summary);
-
-    console.log(summary);
+    console.log(transcription);
   } catch (e) {
     console.error(e);
   } finally {
@@ -47,11 +40,8 @@ export async function summarise(
     if (!keepTranscriptFile) {
       cleanUps.push(fs.promises.rm(transcriptFile));
     }
-    if (!keepSummaryFile) {
-      cleanUps.push(fs.promises.rm(summaryFile));
-    }
     await Promise.allSettled(cleanUps);
   }
 }
 
-export default summarise;
+export default transcribe;
