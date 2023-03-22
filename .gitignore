@@ -129,6 +129,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+.DS_Store
+
 audio.mp3
 summary.txt
 transcription.txt
