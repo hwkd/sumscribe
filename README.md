@@ -1,6 +1,6 @@
 # Sumscribe
 
-Whisper is a command tool that summarises or transcribes YouTube videos. You can provide a YouTube video URL and receive a summary and/or transcription of the video's content.
+Sumscribe is a command tool that summarises or transcribes YouTube videos. You can provide a YouTube video URL and receive a summary and/or transcription of the video's content.
 
 ## Features
 
@@ -21,7 +21,7 @@ Whisper is a command tool that summarises or transcribes YouTube videos. You can
 
 ## Installation
 
-To install and run Whisper on your local machine, follow these steps:
+To install and run sumscribe on your local machine, follow these steps:
 
 1. Clone the repository:
 
