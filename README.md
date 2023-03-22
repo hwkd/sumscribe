@@ -1,4 +1,4 @@
-# Whisper
+# Sumscribe
 
 Whisper is a command tool that summarises or transcribes YouTube videos. You can provide a YouTube video URL and receive a summary and/or transcription of the video's content.
 
@@ -26,13 +26,13 @@ To install and run Whisper on your local machine, follow these steps:
 1. Clone the repository:
 
 ```
-git clone https://github.com/hwkd/whisper.git
+git clone https://github.com/hwkd/sumscribe.git
 ```
 
 2. Change directory to the project folder:
 
 ```
-cd whisper
+cd sumscribe
 ```
 
 3. Install the required dependencies:
@@ -54,8 +54,6 @@ Replace `your_openai_api_key_here` with your actual OpenAI API key.
 ```
 npm start
 ```
-
-Now, you should be able to access the Whisper application on your local machine at `http://localhost:3000`.
 
 ## License
 
