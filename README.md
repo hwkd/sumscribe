@@ -12,7 +12,8 @@ Sumscribe is a command tool that summarises or transcribes YouTube videos. You c
 
 ## Limitations
 
-- Does not work properly for multi-language videos
+- Does not work properly for multi-language videos.
+- Does not work if the video length exceeds around 20 minutes.
 
 ## Prerequisites
 
