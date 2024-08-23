@@ -1,14 +1,12 @@
-import fs from 'fs';
-import {
-  downloadAudioFromVideo,
-  summariseText,
-  transcribeAudioFile,
-} from '../util';
+import fs from "fs";
+import OpenAI from "openai";
+
+import { downloadAudioFromURL } from "../downloader/audio";
 
 export async function summarise(
-  videoURL: string,
+  url: string,
   {
-    apiKey,
+    openai,
     keepAudioFile = false,
     keepTranscriptFile = false,
     keepSummaryFile = false,
@@ -16,7 +14,7 @@ export async function summarise(
     transcriptFile,
     summaryFile,
   }: {
-    apiKey: string;
+    openai: OpenAI;
     keepAudioFile?: boolean;
     keepTranscriptFile?: boolean;
     keepSummaryFile?: boolean;
@@ -27,14 +25,26 @@ export async function summarise(
 ) {
   try {
     if (!fs.existsSync(audioFile)) {
-      await downloadAudioFromVideo(videoURL, audioFile);
+      await downloadAudioFromURL(url, audioFile);
     }
 
-    const transcription = await transcribeAudioFile(audioFile, { apiKey });
-    fs.writeFileSync(transcriptFile, transcription);
+    const transcription = await openai.audio.transcriptions.create({
+      file: fs.createReadStream(audioFile),
+      model: "whisper-1",
+    });
+    fs.writeFileSync(transcriptFile, transcription.text);
 
-    const summary = await summariseText(transcription, { apiKey });
-    fs.writeFileSync(summaryFile, summary);
+    const summary = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: `Summarise in point form. Do not miss important details. Start by providing a title for the summary.`,
+        },
+        { role: "user", content: transcription.text },
+      ],
+    });
+    fs.writeFileSync(summaryFile, summary.choices[0].message.content);
 
     console.log(summary);
   } catch (e) {

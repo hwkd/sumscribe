@@ -1,11 +1,11 @@
 import youtubedl from "youtube-dl-exec";
 
-export async function downloadAudioFromVideo(
-  videoUrl: string,
-  outputFile: string
+export async function downloadAudioFromURL(
+  url: string,
+  outputFile: string,
 ): Promise<void> {
   try {
-    await youtubedl(videoUrl, {
+    await youtubedl(url, {
       extractAudio: true,
       audioFormat: "mp3",
       output: outputFile,

@@ -1,20 +1,18 @@
-import fs from 'fs';
-import { downloadAudioFromVideo, transcribeAudioFile } from '../util';
+import fs from "fs";
+import OpenAI from "openai";
 
-const OUTPUT_AUDIO_FILE = 'audio.mp3';
-const TRANSCRIPT_FILE = 'transcription.txt';
-// const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
+import { downloadAudioFromURL } from "../downloader/audio";
 
 export async function transcribe(
-  videoURL: string,
+  url: string,
   {
-    apiKey,
+    openai,
     keepAudioFile = false,
     keepTranscriptFile = false,
     audioFile,
     transcriptFile,
   }: {
-    apiKey: string;
+    openai: OpenAI;
     keepAudioFile?: boolean;
     keepTranscriptFile?: boolean;
     audioFile: string;
@@ -23,11 +21,14 @@ export async function transcribe(
 ) {
   try {
     if (!fs.existsSync(audioFile)) {
-      await downloadAudioFromVideo(videoURL, audioFile);
+      await downloadAudioFromURL(url, audioFile);
     }
 
-    const transcription = await transcribeAudioFile(audioFile, { apiKey });
-    fs.writeFileSync(transcriptFile, transcription);
+    const transcription = await openai.audio.transcriptions.create({
+      file: fs.createReadStream(audioFile),
+      model: "whisper-1",
+    });
+    fs.writeFileSync(transcriptFile, transcription.text);
 
     console.log(transcription);
   } catch (e) {

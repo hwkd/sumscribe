@@ -1,11 +1,17 @@
 import fs from 'fs';
 import inquirer from 'inquirer';
+import OpenAI from 'openai';
+
 import summarise from './summarise';
 import transcribe from './transcribe';
 
-const OUTPUT_AUDIO_FILE = 'audio.mp3';
+const AUDIO_FILE = 'audio.mp3';
 const TRANSCRIPT_FILE = 'transcription.txt';
 const SUMMARY_FILE = 'summary.txt';
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY!,
+});
 
 let keepAudioFile = false;
 
@@ -22,7 +28,7 @@ inquirer
       name: 'videoURL',
       message: "What's the video URL?",
       when: () => {
-        const audioFileExists = fs.existsSync(OUTPUT_AUDIO_FILE);
+        const audioFileExists = fs.existsSync(AUDIO_FILE);
         if (audioFileExists) {
           keepAudioFile = true;
         }
@@ -34,21 +40,21 @@ inquirer
     switch (answers.cmd) {
       case 'Summarise':
         summarise(answers.videoURL, {
-          apiKey: process.env.OPENAI_API_KEY!,
+          openai,
           keepAudioFile,
           keepTranscriptFile: true,
           keepSummaryFile: true,
-          audioFile: OUTPUT_AUDIO_FILE,
+          audioFile: AUDIO_FILE,
           transcriptFile: TRANSCRIPT_FILE,
           summaryFile: SUMMARY_FILE,
         });
         break;
       case 'Transcribe':
         transcribe(answers.videoURL, {
-          apiKey: process.env.OPENAI_API_KEY!,
+          openai,
           keepAudioFile,
           keepTranscriptFile: true,
-          audioFile: OUTPUT_AUDIO_FILE,
+          audioFile: AUDIO_FILE,
           transcriptFile: TRANSCRIPT_FILE,
         });
         break;
